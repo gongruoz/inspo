@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collage Poetry</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+            overflow: hidden;
+        }
+        #canvas {
+            width: 50%;
+            height: 100vh;
+            background-color: #02006C;
+            overflow-y: scroll;
+            position: relative;
+        }
+        #words {
+            width: 50%;
+            height: 100vh;
+            background-color: #FF5A96;
+            position: relative;
+        }
+        .word-block {
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="canvas"></div>
+<div id="words">
+    <!-- Word blocks will be added here -->
+</div>
+
+<script>
+    const words = [
+        'World', 'Devotion', 'Free', 'Motion', 'Bound', 'Unchained', 'Melody', 'Exist', 'Love', 'Dangerous', 'Thing',
+        'Train', 'Cloud', 'Dream', 'Soul', ';(', 'Need', 'Jesus', 'Animal', 'Nice', 'Day', 'Room', 'Rain', 'Falling',
+        'Dark', 'Valse', 'Amélie', 'Version', 'Piano', 'Crush', 'Flow', 'Angeles', 'Magic', 'Network', 'Touch', 'Step',
+        'QWERTY', 'Gravy', 'Human', 'Covers', 'Band', 'Charming', 'Spring', 'Echoes', 'Either', 'Or', 'Beautiful',
+        'Bright', 'Eternal', 'Gentle', 'Golden', 'Happy', 'Lonely', 'Loving', 'Majestic', 'Mysterious', 'Peaceful',
+        'Quick', 'Quiet', 'Radiant', 'Silent', 'Strong', 'Tender', 'Play', 'Sing', 'Dance', 'Whisper', 'Fly', 'Shine',
+        'Break', 'Create', 'Inspire', 'Embrace', 'Sky', 'Star', 'Moon', 'Heart', 'Light', 'Night', 'Sea', 'Horizon',
+        'Song', 'Story', 'Journey', 'Path', 'Silence', 'Memory', 'Hope', 'I', 'Yes', 'And', 'A', 'The', 'Of', 'Suddenly',
+        'So', 'Therefore', 'Why', 'Yet', 'How', 'What', 'Where', 'Vibes'
+    ];
+
+    const canvas = document.getElementById('canvas');
+    const wordsDiv = document.getElementById('words');
+
+    // Function to create word blocks
+    function createWordBlocks() {
+        words.forEach(word => {
+            const block = document.createElement('div');
+            block.className = 'word-block';
+            block.textContent = word;
+            block.style.top = `${Math.random() * (window.innerHeight - 50)}px`;
+            block.style.left = `${Math.random() * (window.innerWidth / 2 - 50)}px`;
+
+            block.draggable = true;
+            block.ondragstart = dragStart;
+            wordsDiv.appendChild(block);
+        });
+    }
+
+    function dragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.id);
+        e.dataTransfer.setData('word', e.target.textContent);
+    }
+
+    canvas.ondragover = function(e) {
+        e.preventDefault();
+    };
+
+    canvas.ondrop = function(e) {
+        e.preventDefault();
+        const word = e.dataTransfer.getData('word');
+        const newBlock = document.createElement('div');
+        newBlock.className = 'word-block';
+        newBlock.textContent = word;
+        newBlock.style.position = 'absolute';
+        newBlock.style.left = `${e.clientX}px`;
+        newBlock.style.top = `${e.clientY + canvas.scrollTop}px`;
+
+        canvas.appendChild(newBlock);
+        canvas.style.height = `${canvas.scrollHeight + 50}px`;  // Extend canvas height
+    };
+
+    createWordBlocks();
+</script>
+
+</body>
+</html>
